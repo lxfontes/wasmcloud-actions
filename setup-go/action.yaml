@@ -16,7 +16,7 @@ inputs:
   tinygo-version:
     description: "TinyGo version"
     required: false
-    default: "0.35"
+    default: "0.34"
   wash-version:
     description: "wasmCloud wash version"
     required: false
