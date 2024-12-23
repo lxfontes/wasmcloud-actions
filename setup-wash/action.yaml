@@ -1,0 +1,24 @@
+name: "Install wash"
+description: "Common action to install the `wash` tool"
+branding:
+  icon: "code"
+  color: "yellow"
+inputs:
+  wash-version:
+    description: "Version to install"
+    required: false
+    default: "latest"
+runs:
+  using: "composite"
+  steps:
+    - name: wasmCloud PackageCloud Repository
+      shell: bash
+      run: curl -s https://packagecloud.io/install/repositories/wasmCloud/core/script.deb.sh | sudo bash
+    - name: Installing latest
+      shell: bash
+      if: ${{ inputs.wash-version != 'latest' }}
+      run: sudo apt install wash
+    - name: Installing wash@${{ inputs.wash-version }}
+      if: ${{ inputs.wash-version != 'latest' }}
+      shell: bash
+      run: sudo apt install "wash=${{ inputs.wash-version }}"

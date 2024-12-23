@@ -1,0 +1,59 @@
+name: "wasm tooling: Go"
+description: "Install tools required to build Go components"
+branding:
+  icon: "code"
+  color: "yellow"
+inputs:
+  go-version-file:
+    description: "Go version file"
+    required: false
+  go-version:
+    description: "Go version"
+    required: false
+  cache-dependency-path:
+    description: "Path pattern(s) to go.sum, forwarded to setup-go"
+    required: false
+  tinygo-version:
+    description: "TinyGo version"
+    required: false
+    default: "0.35"
+  wash-version:
+    description: "wasmCloud wash version"
+    required: false
+  wasm-tools-version:
+    description: "wasm-tools version"
+    required: false
+    default: "1.220.0"
+  wrpc-version:
+    description: "wrpc version"
+    required: false
+    default: "0.11.1"
+  wrpc:
+    description: "If wrpc should be installed"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: "Go"
+      uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a # v5.2.0
+      with:
+        go-version-file: ${{ inputs.go-version-file }}
+        go-version: ${{ inputs.go-version }}
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}
+    - name: "TinyGo"
+      uses: acifani/setup-tinygo@b2ba42b249c7d3efdfe94166ec0f48b3191404f7 # v2.0.0
+      with:
+        tinygo-version: ${{ inputs.tinygo-version }}
+    - name: "wasm-tools"
+      uses: taiki-e/install-action@ed8c79bccf0b1cb1544a358f81684d3acaa5133f # v2.46.11
+      with:
+        tool: ${{ format('wasm-tools@{0}', inputs.wasm-tools-version) }}
+    - name: "wasmCloud wash"
+      uses: lxfontes/wasmcloud-actions/setup-wash@main
+      with:
+        wash-version: ${{ inputs.wash-version }}
+    - name: "wrpc"
+      if: ${{ inputs.wrpc }}
+      uses: taiki-e/install-action@ed8c79bccf0b1cb1544a358f81684d3acaa5133f # v2.46.11
+      with:
+        tool: ${{ format('wrpc@{0}', inputs.wrpc-version) }}
