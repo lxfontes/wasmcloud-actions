@@ -7,7 +7,6 @@ inputs:
   wash-version:
     description: "Version to install"
     required: false
-    default: "latest"
 runs:
   using: "composite"
   steps:
@@ -16,9 +15,9 @@ runs:
       run: curl -s https://packagecloud.io/install/repositories/wasmCloud/core/script.deb.sh | sudo bash
     - name: Installing latest
       shell: bash
-      if: ${{ inputs.wash-version != 'latest' }}
+      if: ${{ inputs.wash-version == null }}
       run: sudo apt install wash
     - name: Installing wash@${{ inputs.wash-version }}
-      if: ${{ inputs.wash-version != 'latest' }}
+      if: ${{ inputs.wash-version != null }}
       shell: bash
       run: sudo apt install "wash=${{ inputs.wash-version }}"
